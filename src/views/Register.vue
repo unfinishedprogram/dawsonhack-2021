@@ -2,78 +2,56 @@
   <div class="register">
     <div class="panel" id="main">
       <h2>Register</h2>
-      <div class="panel" v-if="!teamChoice">
-        <button @click="goSolo()">Solo</button>
-        <button @click="goTeam()">Team</button>
-      </div>
-      <div class="solo" v-if="teamChoice == 'solo'">
-        <form>
-          <label>Screen Name</label>
-          <input id="screenName" type="text">
-          <label>Dawson Student ID</label>
-          <input id="studentNumber" type="text">
-        </form>
-      </div>
-      <div class="team" v-if="teamChoice == 'team'">
+      <div class="team">
         <form id="teammenu">
-          <label>Team Name</label>
-          <input type="text" v-model="teamData.name">
+          <span>
+            <label>Team Name</label>
+            <input type="text" v-model="teamData.name" />
+          </span>
           <span class="teamMember panel" v-for="(member, i) in teamData.members" :key="member">
-            <span class="header">
-              <span class="member_number">Member #{{i+1}}</span>
-              <span class="remove" @click="teamData.members.splice(i, 1)"> X </span>
-            </span>
+            <IconX class="remove icon"  @click="teamData.members.splice(i, 1)" />
             <span class="inputspan">
               <label>Screen Name</label>
-              <input id="screenName" type="text" v-model="teamData.members[i].name">
+              <input id="screenName" type="text" v-model="teamData.members[i].name" />
             </span>
             <span class="inputspan">
               <label>Dawson Student ID</label>
-              <input id="studentNumber" type="text" v-model="teamData.members[i].studID">
+              <input id="studentNumber" type="text" v-model="teamData.members[i].studID" />
             </span>
           </span>
           <button class="addUserButton" @click="teamData.members.push({})">
             add team member +
           </button>
+          <button v-if="inputValid" @click="register()">
+            register
+          </button>
         </form>
       </div>
-      <span class="bottom_buttons" v-if="teamChoice">
-        <button @click="teamChoice = ''">
-          back
-        </button>
-        <button @click="register()">
-          register
-        </button>
-      </span>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script lang='ts'>
 import { defineComponent } from 'vue';
+
+import IconX from '@/components/icons/IconX.vue';
 
 export default defineComponent({
   setup() {
     console.log('setup');
   },
+  components: {
+    IconX,
+  },
   data() {
     return {
-      teamChoice: '',
       teamData: {
-        members: [
-
-        ],
+        members: [],
       },
     };
   },
 
   methods: {
-    goSolo() {
-      this.$data.teamChoice = 'solo';
-    },
-    goTeam() {
-      this.$data.teamChoice = 'team';
-    },
     register() {
       console.log(this.$data.teamData);
     },
@@ -81,8 +59,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped lang='scss'>
-
+<style scoped lang="scss">
 .teammenu {
   span {
     display: flex;
@@ -96,7 +73,11 @@ export default defineComponent({
 }
 
 .inputspan {
-  text-align: right;
+  label{
+    text-align: right;
+    vertical-align: middle;
+    line-height: 32px;
+  }
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -108,18 +89,15 @@ export default defineComponent({
   .header {
     display: flex;
     justify-content: space-around;
-    .remove {
-      cursor: pointer;
-      display: block;
-      text-align: center;
-      padding: 0.2rem;
-      border-radius: 0.2rem;
-      width: 1rem;
-      height: 1rem;
-      background: red;
-      border: 2px solid darkred;
-      margin-left: auto;
-    }
+  }
+  .remove {
+    position:absolute;
+    cursor: pointer;
+    border-radius: 0.2rem;
+    width: 1rem;
+    height: 1rem;
+    color:red;
+    border: 2px solid red;
   }
 }
 form {
@@ -129,14 +107,17 @@ form {
   margin-left: auto;
   margin-right: auto;
   * {
-    margin:0.25rem
+    margin: 0.25rem;
   }
   input {
     padding: 0.5rem;
-    box-shadow: inset 0px 0px 5px rgba(1, 1, 1, 0.1), 2px 2px 5px rgba(1, 1, 1, 0.5);
+    box-shadow: inset
+      0px 0px 5px rgba(1, 1, 1, 0.1),
+      2px 2px 5px rgba(1, 1, 1, 0.25);
     border: none;
   }
   label {
+    text-align: right;
     font-weight: bold;
     text-align: left;
   }
@@ -166,9 +147,8 @@ button {
   border: 1px solid #abf;
   border-radius: 2px;
   min-width: 100px;
-  &:hover{
+  &:hover {
     background: #78f;
   }
 }
-
 </style>
